@@ -24,9 +24,20 @@ The scripts use only the Python 3.8+ standard library.
   token**. Use `gluesync.mcp_read` / `gluesync.api_read` for read-only work, `gluesync.mcp` /
   `gluesync.api` to make changes.
 
+## Install
+
+In Claude Code:
+
+```bash
+/plugin install gluesync --marketplace molo17inc/gluesync-claude-plugin
+```
+
+On older Claude Code versions, add the marketplace first:
+`/plugin marketplace add molo17inc/gluesync-claude-plugin`, then `/plugin install gluesync@gluesync`.
+
 ## Setup
 
-Install the plugin, then in your own terminal:
+Then, in your own terminal:
 
 ```bash
 export GLUESYNC_BASE=https://your-core-hub.example.com

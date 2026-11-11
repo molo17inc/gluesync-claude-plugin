@@ -1,0 +1,17 @@
+{
+  "name": "gluesync",
+  "owner": {
+    "name": "MOLO17",
+    "url": "https://molo17.com"
+  },
+  "metadata": {
+    "description": "Gluesync plugins for Claude by MOLO17."
+  },
+  "plugins": [
+    {
+      "name": "gluesync",
+      "source": "./",
+      "description": "Work with your Gluesync Core Hub: build and run real-time replication pipelines through the REST API, the built-in MCP server or the web UI, and diagnose them."
+    }
+  ]
+}
