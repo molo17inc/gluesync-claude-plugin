@@ -1,0 +1,12 @@
+{
+  "name": "gluesync",
+  "version": "0.1.0",
+  "description": "Work with your Gluesync Core Hub: build and run real-time replication pipelines through the REST API, the built-in MCP server or the web UI, and diagnose them, grounded in the official Gluesync documentation.",
+  "author": {
+    "name": "MOLO17",
+    "url": "https://molo17.com"
+  },
+  "homepage": "https://docs.molo17.com/gluesync/latest/index.html",
+  "license": "Apache-2.0",
+  "keywords": ["gluesync", "cdc", "change-data-capture", "replication", "data-integration", "etl", "molo17"]
+}
