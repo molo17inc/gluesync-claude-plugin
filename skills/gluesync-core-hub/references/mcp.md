@@ -19,15 +19,16 @@ the caller's token, so roles, license and audit apply exactly as in the Control 
 
 ## Connect it to Claude
 
-Claude Code (the user runs this in their own terminal, with the token in their environment):
+The user does this once, in their own terminal or client settings, so the token never passes
+through the conversation. Claude Code:
 
 ```bash
-claude mcp add --transport http gluesync "$GLUESYNC_BASE/mcp/http" \
-  --header "Authorization: Bearer $GLUESYNC_PAT"
+claude mcp add --transport http gluesync https://<core-hub>/mcp/http \
+  --header "Authorization: Bearer <personal-api-token>"
 ```
 
-Claude Desktop or other clients: add a remote MCP server with the same URL and header. Give an
-assistant the read-only scope unless it has to change something.
+Other clients: add a remote MCP server with the same URL and header. Give an assistant the
+read-only scope (`gluesync.mcp_read`) unless it has to change something.
 
 If the client gets **HTTP 403 `Invalid Host: …`**: Core Hub's DNS-rebinding protection only allows
 `localhost` by default. The Core Hub administrator sets `GLUESYNC_MCP_ALLOWED_HOSTS=<host>` (and
@@ -40,9 +41,8 @@ A certificate without the host in its subjectAltName makes Node-based clients fa
 
 ## Tools
 
-The catalog changes between releases: always list the tools of the user's Core Hub
-(`python3 scripts/mcp.py tools`, or the client's tool list) and read a tool's schema before calling
-it. The documented groups:
+The catalog changes between releases: always check the tool list the client shows for the user's
+Core Hub and read a tool's schema before calling it. The documented groups:
 
 | Group | Tools (as documented) |
 |---|---|

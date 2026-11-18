@@ -18,8 +18,17 @@ shaping a body by hand.
 - Base: the Core Hub address (`https://<host>` behind the reverse proxy, `https://<host>:1717`
   without it). Endpoints sit at the root: no `/api` prefix.
 - JSON over HTTPS. Request headers are capped at 8 KB.
-- Unknown paths may be redirected to the Control Plane instead of answering 404:
-  `scripts/gs_api.py` reports such a redirect as a wrong path.
+- Unknown paths may be redirected to the Control Plane instead of answering 404: a redirect to the
+  UI means the path is wrong. Do not follow redirects (`curl` without `-L`) so you see it.
+- A failed call explains itself in the response body: always show the body, not just the status.
+
+```bash
+curl -sS -H "Authorization: Bearer <token>" https://<core-hub>/pipelines
+curl -sS -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/json" \
+  -d '{"name": "orders"}' https://<core-hub>/pipelines
+```
+
+With a self-signed certificate, pass the CA with `--cacert ca.pem`; use `-k` only on a test box.
 
 ## Authentication
 

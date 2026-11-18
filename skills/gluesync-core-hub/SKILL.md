@@ -24,9 +24,8 @@ list rather than insisting.
 | The user wants to… | Use |
 |---|---|
 | Be guided through a task, or has no API access | The Control Plane UI: [references/ui.md](references/ui.md) |
-| Let Claude act on their Core Hub, and it is connected as an MCP server | The MCP tools directly: [references/mcp.md](references/mcp.md) |
-| Let Claude act, with no MCP connector | `scripts/mcp.py` (MCP over the command line) or `scripts/gs_api.py` (REST) |
-| Script or automate outside Claude | REST: [references/rest-api.md](references/rest-api.md) |
+| Let Claude act on their Core Hub | Connect the Core Hub MCP server, then use its tools: [references/mcp.md](references/mcp.md) |
+| Script or automate outside Claude | REST with `curl`: [references/rest-api.md](references/rest-api.md) |
 | Fix something that is stuck or failing | [references/troubleshooting.md](references/troubleshooting.md) |
 
 Prefer MCP over raw REST when both are available: its tools encode the order of operations and
@@ -45,17 +44,11 @@ the payload shapes, and `validate_entities` checks an entity before anything is 
    `gluesync.api_read` to look, `gluesync.mcp` or `gluesync.api` to change things. MCP scopes do not
    open REST, and API scopes do not open MCP.
    ([Personal API Tokens](https://docs.molo17.com/gluesync/latest/security/personal-api-tokens.html))
-3. **Never ask the user to paste a token or password into the chat.** Have them export it in their
-   own shell (`export GLUESYNC_PAT=...`) so the scripts read it from the environment. Never echo,
-   log or write secrets to a file.
-4. Set the environment for the scripts:
-   ```bash
-   export GLUESYNC_BASE=https://gluesync.example.com      # the user's Core Hub
-   export GLUESYNC_PAT=gsp_...                             # set by the user, not by you
-   # self-signed certificate: export GLUESYNC_CA_FILE=/path/ca.pem   (or GLUESYNC_INSECURE_TLS=1 on a test box)
-   python3 scripts/gs_api.py whoami                        # REST scope check
-   python3 scripts/mcp.py tools                            # MCP scope check, lists the tools
-   ```
+3. **Never ask the user to paste a token or password into the chat.** The user puts the token into
+   their MCP client configuration themselves, as [references/mcp.md](references/mcp.md) shows. Never
+   echo, log or write secrets to a file.
+4. Once connected, check access with a read-only call such as `list_pipelines` or
+   `get_corehub_version`, and list the tools: names differ between Core Hub releases.
 
 ## Rules that keep replication data safe
 
@@ -90,10 +83,10 @@ see `list_agent_types`) → 3. `assign_agent` (without it, later steps fail) →
 `upsert_entities` → 11. start: `sync_command {"command": "start", "with_snapshot": true}` on newer
 releases, `start_sync` on earlier ones.
 
-`scripts/mcp.py setup` performs exactly that sequence and prints each step; confirm the plan with
-the user first, and pass database passwords via `GLUESYNC_SOURCE_PASSWORD` /
-`GLUESYNC_TARGET_PASSWORD`. Run `python3 scripts/mcp.py schema <tool>` before calling a tool whose
-arguments you have not seen on this Core Hub.
+Show the user the whole plan (pipeline name, agents, tables, keys) before the first write, and read
+a tool's input schema before calling a tool whose arguments you have not seen on this Core Hub.
+Database passwords go into `create_connection`: ask the user to enter them in the Control Plane
+(**Edit source** / **Edit target**) if they prefer not to pass them through the conversation.
 
 Then follow a change through: insert, update **and** delete a probe row on the source and confirm
 each on the target. Deletes and updates are where mapping problems show up.

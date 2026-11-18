@@ -11,11 +11,10 @@ Plane web UI. Everything the skill teaches is grounded in the official
 | Component | What it does |
 |---|---|
 | `gluesync-core-hub` skill | Picks the right route (UI, MCP, REST), enforces safe defaults (read first, confirm every change, never reset checkpoints without support), and walks Claude through building, running and troubleshooting pipelines |
-| `scripts/mcp.py` | Calls your Core Hub's MCP tools from the command line, including a one-command source-to-target `setup` |
-| `scripts/gs_api.py` | Small REST client that reports exactly what Core Hub answered |
 | `references/` | UI guide, MCP tool map, REST reference and troubleshooting table, each linked to its documentation page |
 
-The scripts use only the Python 3.8+ standard library.
+The plugin is instructions only: it runs no code of its own. Claude acts on your Core Hub through
+the MCP server built into Core Hub, which you connect yourself.
 
 ## Requirements
 
@@ -37,20 +36,18 @@ On older Claude Code versions, add the marketplace first:
 
 ## Setup
 
-Then, in your own terminal:
+To let Claude act on your Core Hub, connect its MCP server once, in your own terminal (never paste
+the token into the chat):
 
 ```bash
-export GLUESYNC_BASE=https://your-core-hub.example.com
-export GLUESYNC_PAT=gsp_...            # your token; never paste it into the chat
-# private or self-signed certificate:
-export GLUESYNC_CA_FILE=/path/to/ca.pem
+claude mcp add --transport http gluesync https://your-core-hub.example.com/mcp/http \
+  --header "Authorization: Bearer gsp_your_token"
 ```
 
-Optionally connect the Core Hub MCP server to Claude Code directly:
-
-```bash
-claude mcp add --transport http gluesync "$GLUESYNC_BASE/mcp/http" --header "Authorization: Bearer $GLUESYNC_PAT"
-```
+In the Control Plane, **Settings → AI agents → Copy HTTP URL** gives you the exact address. If the
+connection is refused with `Invalid Host`, see the
+[Core Hub MCP docs](https://docs.molo17.com/gluesync/latest/gs-modules/corehub-mcp.html).
+Without MCP the skill still guides you through the Control Plane and the REST API.
 
 Then ask things like "list my Gluesync pipelines and tell me which entities are in error",
 "replicate the orders table from PostgreSQL to Snowflake", or "walk me through starting a snapshot
@@ -58,17 +55,16 @@ in the Control Plane".
 
 ## Where it works
 
-The skill runs anywhere Claude can use skills. The scripts and the MCP connection need network
-access to your Core Hub, so they work in Claude Code and the Claude desktop app on a machine that
-can reach it. On claude.ai in the browser, the skill can explain the API and guide you through the
-UI but cannot call a Core Hub on a private network.
+The skill runs anywhere Claude can use skills. Acting on a Core Hub needs the MCP connection, which
+needs network access to your Core Hub: it works in Claude Code and the Claude desktop app on a
+machine that can reach it. Where it cannot, the skill still explains the API and guides you through
+the UI.
 
 ## Privacy Policy
 
-This plugin does not collect, store or send any data to MOLO17 or to any third party. The scripts
-talk only to the Core Hub address you configure, using the token you provide through environment
-variables; they keep no files, logs or caches, and the token is held in memory only while a script
-runs. Data returned by your Core Hub (pipeline configuration, status, error messages, which can
+This plugin contains instructions only and runs no code. It does not collect, store or send any
+data to MOLO17 or to any third party. Claude reaches only the Core Hub you connect, with the token
+you configure in your own MCP client. Data returned by your Core Hub (pipeline configuration, status, error messages, which can
 include row values) is shown to Claude in your conversation and is handled under your agreement with
 Anthropic. Gluesync itself is covered by the
 [MOLO17 privacy policy](https://molo17.com/privacy-policy/). Questions: see Support below.
