@@ -25,7 +25,7 @@ list rather than insisting.
 |---|---|
 | Be guided through a task, or has no API access | The Control Plane UI: [references/ui.md](references/ui.md) |
 | Let Claude act on their Core Hub | Connect the Core Hub MCP server, then use its tools: [references/mcp.md](references/mcp.md) |
-| Script or automate outside Claude | REST with `curl`: [references/rest-api.md](references/rest-api.md) |
+| Script or automate outside Claude | REST: [references/rest-api.md](references/rest-api.md) |
 | Fix something that is stuck or failing | [references/troubleshooting.md](references/troubleshooting.md) |
 
 Prefer MCP over raw REST when both are available: its tools encode the order of operations and
