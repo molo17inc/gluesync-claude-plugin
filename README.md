@@ -67,7 +67,7 @@ data to MOLO17 or to any third party. Claude reaches only the Core Hub you conne
 you configure in your own MCP client. Data returned by your Core Hub (pipeline configuration, status, error messages, which can
 include row values) is shown to Claude in your conversation and is handled under your agreement with
 Anthropic. Gluesync itself is covered by the
-[MOLO17 privacy policy](https://molo17.com/privacy-policy/). Questions: see Support below.
+[MOLO17 privacy policy](https://www.iubenda.com/privacy-policy/51934644). Questions: see Support below.
 
 ## Support
 

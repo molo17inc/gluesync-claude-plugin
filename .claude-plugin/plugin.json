@@ -8,5 +8,17 @@
   },
   "homepage": "https://docs.molo17.com/gluesync/latest/index.html",
   "license": "Apache-2.0",
-  "keywords": ["gluesync", "cdc", "change-data-capture", "replication", "data-integration", "etl", "molo17"]
+  "keywords": [
+    "gluesync",
+    "cdc",
+    "change-data-capture",
+    "replication",
+    "data-integration",
+    "etl",
+    "molo17"
+  ],
+  "repository": "https://github.com/molo17inc/gluesync-claude-plugin",
+  "documentationUrl": "https://docs.molo17.com/gluesync/latest/",
+  "supportUrl": "https://support.molo17.com",
+  "privacyPolicyUrl": "https://www.iubenda.com/privacy-policy/51934644"
 }
