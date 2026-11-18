@@ -19,16 +19,22 @@ shaping a body by hand.
   without it). Endpoints sit at the root: no `/api` prefix.
 - JSON over HTTPS. Request headers are capped at 8 KB.
 - Unknown paths may be redirected to the Control Plane instead of answering 404: a redirect to the
-  UI means the path is wrong. Do not follow redirects (`curl` without `-L`) so you see it.
+  UI means the path is wrong. Do not follow redirects automatically, so you see it.
 - A failed call explains itself in the response body: always show the body, not just the status.
 
-```bash
-curl -sS -H "Authorization: Bearer <token>" https://<core-hub>/pipelines
-curl -sS -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/json" \
-  -d '{"name": "orders"}' https://<core-hub>/pipelines
+```http
+GET /pipelines
+Authorization: Bearer <token>
+
+POST /pipelines
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{"name": "orders"}
 ```
 
-With a self-signed certificate, pass the CA with `--cacert ca.pem`; use `-k` only on a test box.
+With a self-signed certificate, trust the Core Hub's CA in the HTTP client; skip certificate checks
+only on a test installation.
 
 ## Authentication
 
